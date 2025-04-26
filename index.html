@@ -3,401 +3,591 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FriendsZone - Admins</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Our Group Admins</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #007FFF;
-            --secondary-color: #005fbf;
-            --accent-color: #7FFF00;
-            --accent-secondary: #FFA500;
-            --accent-tertiary: #8A2BE2;
-            --light-color: #f8f9fa;
-            --dark-color: #121212;
-            --darker-color: #0a0a0a;
-            --success-color: #4bb543;
-            --warning-color: #FFA500;
-            --danger-color: #ff4d4d;
-            --gray-color: #6c757d;
-            --light-gray: #2a2a2a;
-            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            --box-shadow-light: 0 2px 10px rgba(0, 0, 0, 0.2);
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --border-radius: 12px;
-            --card-gradient: linear-gradient(145deg, #1e1e1e, #2a2a2a);
-        }
-
-        [data-theme="light"] {
-            --primary-color: #007FFF;
-            --secondary-color: #005fbf;
-            --accent-color: #7FFF00;
-            --accent-secondary: #FFA500;
-            --accent-tertiary: #8A2BE2;
-            --light-color: #121212;
-            --dark-color: #f8f9fa;
-            --darker-color: #e9ecef;
-            --gray-color: #5a5a5a;
-            --light-gray: #e0e0e0;
-            --card-gradient: linear-gradient(145deg, #ffffff, #f1f3f5);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: background-color 0.5s ease, color 0.5s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* Apply smooth scrolling */
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            color: var(--light-color);
-            line-height: 1.6;
-            background-color: var(--dark-color);
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(0, 127, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(255, 165, 0, 0.15) 0%, transparent 50%);
-            background-attachment: fixed;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s ease;
+            line-height: 1.6; /* Improve readability */
+            margin: 0; /* Ensure no default body margin */
+            padding: 0; /* Ensure no default body padding */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        /* Light Mode Styles */
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* Soft pastel gradient */
+            color: #333;
         }
 
-        h2 {
-            font-size: 2.2rem;
-            margin-bottom: 40px;
+        .light-mode .glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .light-mode .theme-toggle {
+            color: #333;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); /* Elegant deep tones */
+            color: #e2e8f0; /* Soft off-white */
+        }
+
+        .dark-mode .glass-card {
+            background: rgba(45, 55, 72, 0.3); /* Slightly transparent dark */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(74, 85, 104, 0.5); /* Softer border */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); /* Darker shadow */
+        }
+
+        .dark-mode .theme-toggle {
+            color: #e2e8f0;
+            background: rgba(45, 55, 72, 0.5);
+            border: 1px solid rgba(74, 85, 104, 0.5);
+        }
+
+        /* General Card Styling */
+        .glass-card {
+            border-radius: 16px;
+            padding: 1.5rem; /* Adequate padding for content */
+            margin-bottom: 1.5rem; /* Space between cards */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
+            opacity: 0; /* Start hidden for animation */
+            transform: translateY(20px); /* Start slightly below for animation */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Smooth animation */
+            width: 100%; /* Ensure card takes full width on mobile */
+            box-sizing: border-box; /* Include padding and border in element's total width */
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        /* Admins Section */
-        .admins {
-            position: relative;
-            overflow: hidden;
+        .glass-card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .admins::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(138, 43, 226, 0.1) 0%, transparent 30%),
-                radial-gradient(circle at 80% 70%, rgba(0, 127, 255, 0.1) 0%, transparent 30%);
-            z-index: 0;
-        }
-
-        .admins-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .admin-card {
-            background: var(--card-gradient);
-            border-radius: var(--border-radius);
-            padding: 40px;
-            box-shadow: var(--box-shadow);
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            text-align: center;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        [data-theme="light"] .admin-card {
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .admin-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: conic-gradient(
-                from 180deg at 50% 50%,
-                rgba(0, 127, 255, 0.1) 0%,
-                rgba(138, 43, 226, 0.1) 50%,
-                rgba(0, 127, 255, 0.1) 100%
-            );
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .admin-card:hover::before {
-            opacity: 0.3;
-        }
-
-        .admin-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .admin-avatar {
-            width: 150px;
-            height: 150px;
+        .glass-card img {
+            width: 96px;
+            height: 96px;
             border-radius: 50%;
             object-fit: cover;
-            margin: 0 auto 25px;
-            border: 5px solid var(--darker-color);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            transition: all 0.4s ease;
+            margin-bottom: 1rem;
+            border: 3px solid currentColor; /* Border matches text color */
+            transition: border-color 0.5s ease; /* Smooth color transition */
         }
 
-        .admin-card:hover .admin-avatar {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(0, 127, 255, 0.3);
-            border-color: rgba(0, 127, 255, 0.3);
+        .glass-card h3 {
+            font-size: 1.25rem; /* text-xl - good size for mobile headings */
+            font-weight: 600; /* semi-bold */
+            margin-bottom: 0.25rem; /* Reduced margin */
         }
 
-        .admin-card h3 {
-            margin-bottom: 8px;
-            color: var(--light-color);
-            font-size: 1.6rem;
+        .glass-card .role {
+            font-size: 0.9rem; /* text-sm - clear but not dominant */
+            font-weight: 600; /* Make role text bold */
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            transition: color 0.5s ease; /* Smooth color transition */
         }
 
-        .admin-username {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            display: block;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.4s ease;
-        }
-
-        .admin-card:hover .admin-username {
-            color: var(--accent-tertiary);
-            text-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
-        }
-
-        .admin-role {
-            display: inline-block;
-            padding: 6px 18px;
-            background: linear-gradient(135deg, var(--darker-color), var(--dark-color));
-            border-radius: 50px;
-            font-size: 0.95rem;
-            color: var(--gray-color);
-            margin-bottom: 25px;
-            font-weight: 600;
-            box-shadow: var(--box-shadow-light);
-        }
-
-        .admin-card p {
-            margin: 0 auto;
-            font-size: 1.1rem;
-            color: var(--gray-color);
-        }
-
-        /* Admin Social Links - Enhanced */
-        .admin-social {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .admin-social-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--darker-color);
-            color: var(--light-color);
-            font-size: 1.2rem;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--box-shadow-light);
-        }
-
-        .admin-social-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-tertiary));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .admin-social-link:hover::before {
-            opacity: 1;
-        }
-
-        .admin-social-link i {
-            position: relative;
-            z-index: 1;
-        }
-
-        .admin-social-link:hover {
-            transform: translateY(-3px) scale(1.1);
-            box-shadow: 0 8px 20px rgba(0, 127, 255, 0.3);
-        }
-
-        /* Specific icon colors and hover effects */
-        .admin-social-link.telegram {
-            color: #0088cc;
-        }
-
-        .admin-social-link.instagram {
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            color: white;
-        }
-
-        .admin-social-link.telegram:hover {
-            color: white;
-        }
-
-        .admin-social-link.instagram:hover::before {
-            opacity: 0;
-        }
-
-        .admin-info p {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .admin-info i {
-            color: var(--primary-color);
-            width: 20px;
+        .card-details {
             text-align: center;
+            margin-bottom: 1rem;
+            width: 100%; /* Take full width of card padding */
+            font-size: 0.95rem; /* Slightly larger font for details */
+            line-height: 1.5; /* Spacing for readability */
         }
 
-        @media (max-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            
-            h2 {
-                font-size: 1.8rem;
-            }
+        .card-details p {
+            margin-bottom: 0.5rem;
         }
 
-        /* Theme toggle button */
+        .card-details strong {
+            font-weight: 600;
+        }
+
+        .social-links {
+            margin-top: 0.5rem; /* Adjusted margin */
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1.5rem; /* Increased space between icons for easier tapping */
+            font-size: 1.8rem; /* Larger icons for touch targets */
+        }
+
+        .social-links a {
+            color: inherit; /* Inherit color from card text */
+            transition: color 0.3s ease, transform 0.2s ease; /* Add transform for subtle press effect */
+            padding: 0.5rem; /* Add padding to increase touch target area */
+            border-radius: 8px; /* Rounded corners for touch area */
+        }
+
+        .social-links a:hover,
+        .social-links a:active { /* Use :active for touch feedback */
+             opacity: 0.8;
+             transform: scale(0.95); /* Subtle press down effect */
+        }
+
+        .glass-card .bio {
+            font-size: 1rem; /* text-base */
+            font-weight: 300; /* light */
+            line-height: 1.5;
+            margin-top: 1rem; /* Added margin above bio */
+            font-style: italic; /* Optional: style bio as quote */
+            opacity: 0.9; /* Slightly less prominent */
+        }
+
+         /* Role Specific Colors */
+        body.light-mode .card-owner .role,
+        body.light-mode .card-owner img {
+            color: #BA55D3; /* Medium Orchid */
+        }
+
+        body.light-mode .card-co-owner .role,
+        body.light-mode .card-co-owner img {
+             color: #9370DB; /* Medium Purple */
+        }
+
+        body.light-mode .card-admin .role,
+        body.light-mode .card-admin img {
+             color: #6495ED; /* Cornflower Blue */
+        }
+
+        body.dark-mode .card-owner .role,
+        body.dark-mode .card-owner img {
+             color: #EE82EE; /* Violet - Neon-like */
+        }
+
+        body.dark-mode .card-co-owner .role,
+        body.dark-mode .card-co-owner img {
+             color: #BA55D3; /* Medium Orchid - Neon-like */
+        }
+
+        body.dark-mode .card-admin .role,
+        body.dark-mode .card-admin img {
+             color: #4169E1; /* Royal Blue - Neon-like */
+        }
+
+
+        /* Header/Title */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            padding: 1rem 0;
+            text-align: center;
+            font-size: 2rem; /* text-3xl */
+            font-weight: 700; /* bold */
+            margin-bottom: 2rem;
+            transition: background-color 0.5s ease;
+        }
+
+        body.light-mode header {
+            background: rgba(245, 247, 250, 0.8); /* Semi-transparent light */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            color: #333;
+        }
+
+        body.dark-mode header {
+            background: rgba(26, 32, 44, 0.8); /* Semi-transparent dark */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            color: #e2e8f0;
+        }
+
+
+        /* Theme Toggle Button */
         .theme-toggle {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
+            top: 1rem;
+            right: 1rem;
+            width: 48px; /* Increased size for touch target */
+            height: 48px; /* Increased size for touch target */
             border-radius: 50%;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            cursor: pointer;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            z-index: 100;
-            transition: all 0.3s ease;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease; /* Add transform for subtle press effect */
+            z-index: 20;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        .theme-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(0, 127, 255, 0.4);
+         .theme-toggle:hover,
+         .theme-toggle:active { /* Use :active for touch feedback */
+             transform: scale(0.95); /* Subtle press down effect */
+         }
+
+
+        .theme-toggle i {
+            font-size: 1.5rem; /* Larger icon */
         }
-    </style>
-</head>
-<body>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <i class="fas fa-moon" aria-hidden="true"></i>
-    </button>
 
-    <div class="container">
-        <h2>Meet Our Admins</h2>
-        <div class="grid">
-            <div class="admin-card">
-                <img src="mugen.jpg" alt="Mugen" class="admin-avatar" loading="lazy" onerror="this.src='https://placehold.co/100x100/cccccc/ffffff?text=Admin'">
-                <h3>Mugen</h3>
-                <span class="admin-role">Owner</span>
-                <div class="admin-info">
-                    <p><i class="fas fa-birthday-cake"></i> DOB: March 03, 2002</p>
-                    <p><i class="fas fa-map-marker-alt"></i> Location: New Delhi, India</p>
-                    <p><i class="fas fa-briefcase"></i> Study/Job: Self Business</p>
-                </div>
-                <div class="admin-social">
-                    <a href="#" class="admin-social-link telegram" target="_blank" aria-label="Telegram">
-                        <i class="fab fa-telegram"></i>
-                    </a>
-                    <a href="#" class="admin-social-link instagram" target="_blank" aria-label="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
+        /* Responsive Grid for Cards */
+        .cards-container {
+            display: grid;
+            gap: 1.5rem; /* Gap between cards */
+            padding: 0 1rem; /* Horizontal padding for mobile */
+            max-width: 1200px; /* Max width for larger screens */
+            margin: 0 auto; /* Center the container */
+            box-sizing: border-box; /* Include padding in container width */
+        }
 
-            <div class="admin-card">
-                <img src="Lion.jpg" alt="Lion" class="admin-avatar" loading="lazy" onerror="this.src='https://placehold.co/100x100/cccccc/ffffff?text=Admin'">
-                <h3>Lion</h3>
-                <span class="admin-role">Co-Owner</span>
-                <div class="admin-info">
-                    <p><i class="fas fa-birthday-cake"></i> DOB: May 22, 2001</p>
-                    <p><i class="fas fa-map-marker-alt"></i> Location: London, UK</p>
-                    <p><i class="fas fa-briefcase"></i> Study/Job: Graphics Designer</p>
-                </div>
-                <div class="admin-social">
-                    <a href="#" class="admin-social-link telegram" target="_blank" aria-label="Telegram">
-                        <i class="fab fa-telegram"></i>
-                    </a>
-                    <a href="#" class="admin-social-link instagram" target="_blank" aria-label="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
-
-        function setTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            
-            if (theme === 'dark') {
-                themeIcon.classList.replace('fa-sun', 'fa-moon');
-            } else {
-                themeIcon.classList.replace('fa-moon', 'fa-sun');
+        @media (min-width: 640px) { /* Small screens and up (tablets) */
+            .cards-container {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 2+ columns */
+                gap: 1.5rem; /* Consistent gap */
+                padding: 0 1.5rem; /* Slightly more padding on tablets */
             }
         }
 
-        // Check for saved preference or system preference
-        const savedTheme = localStorage.getItem('theme') || 
-                         (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        setTheme(savedTheme);
+        @media (min-width: 1024px) { /* Large screens and up (desktops) */
+            .cards-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 3+ columns */
+                gap: 2rem; /* Larger gap */
+                padding: 0 2rem; /* More padding on desktops */
+            }
+        }
 
-        // Toggle theme on button click
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            setTheme(currentTheme === 'light' ? 'dark' : 'light');
-        });
+    </style>
+</head>
+<body class="light-mode">
+
+    <header>
+        Our Group Admins
+    </header>
+
+    <div class="theme-toggle" id="theme-toggle" aria-label="Toggle Dark/Light Mode">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <main class="cards-container">
+        <section class="glass-card card-owner">
+            <img src="mugen.jpg" alt="Owner Profile Picture" loading="lazy">
+            <h3>Mugen</h3>
+            <p class="role">Owner</p>
+
+            <div class="card-details">
+                <p><strong>Username:</strong> @yamimugen</p>
+                <p><strong>DOB:</strong> 03/03/2002</p>
+                <p><strong>Status:</strong> Group Founder</p>
+                <p><strong>Location:</strong> Delhi, India</p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://t.me/yamimugen" target="_blank" aria-label="Telegram Link for Mugen">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://instagram.com/Lionxlover" target="_blank" aria-label="Instagram Link for Mugen">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <p class="bio">"Silent tides run deep."</p>
+        </section>
+
+        <section class="glass-card card-co-owner">
+            <img src="user.png" alt="Co-Owner Profile Picture" loading="lazy">
+            <h3>Coowner</h3>
+            <p class="role">Co-Owner</p>
+
+            <div class="card-details">
+                <p><strong>Username:</strong> @Coowner</p>
+                <p><strong>DOB:</strong> 05/12/1992</p>
+                <p><strong>Status:</strong> Community Architect</p>
+                <p><strong>Location:</strong> Digital Space</p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://t.me/coowner" target="_blank" aria-label="Telegram Link for Maria Garcia">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://instagram.com/coowner" target="_blank" aria-label="Instagram Link for Maria Garcia">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <p class="bio">"Helping ideas flourish and connections grow."</p>
+        </section>
+
+        <section class="glass-card card-admin">
+            <img src="user.png" alt="Admin Profile Picture" loading="lazy">
+            <h3>David Lee</h3>
+            <p class="role">Admin</p>
+
+            <div class="card-details">
+                <p><strong>Username:</strong> @david_admin1</p>
+                <p><strong>DOB:</strong> 11/03/1995</p>
+                <p><strong>Status:</strong> Student, Computer Science</p>
+                <p><strong>Location:</strong> City A</p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://t.me/david_admin1" target="_blank" aria-label="Telegram Link for David Lee">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://instagram.com/david_insta1" target="_blank" aria-label="Instagram Link for David Lee">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <p class="bio">"Ensuring smooth conversations for everyone."</p>
+        </section>
+
+        <section class="glass-card card-admin">
+            <img src="user.png" alt="Admin Profile Picture" loading="lazy">
+            <h3>Sophia Kim</h3>
+            <p class="role">Admin</p>
+
+            <div class="card-details">
+                <p><strong>Username:</strong> @sophia_admin2</p>
+                <p><strong>DOB:</strong> 07/21/1998</p>
+                <p><strong>Status:</strong> Software Engineer</p>
+                <p><strong>Location:</strong> City B</p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://t.me/sophia_admin2" target="_blank" aria-label="Telegram Link for Sophia Kim">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://instagram.com/sophia_insta2" target="_blank" aria-label="Instagram Link for Sophia Kim">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <p class="bio">"Here to help make the group a better place."</p>
+        </section>
+
+        <section class="glass-card card-admin">
+            <img src="user.png" alt="Admin Profile Picture" loading="lazy">
+            <h3>Michael Brown</h3>
+            <p class="role">Admin</p>
+
+            <div class="card-details">
+                <p><strong>Username:</strong> @michael_admin3</p>
+                <p><strong>DOB:</strong> 02/14/1991</p>
+                <p><strong>Status:</strong> Marketing Specialist</p>
+                <p><strong>Location:</strong> City C</p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://t.me/michael_admin3" target="_blank" aria-label="Telegram Link for Michael Brown">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://instagram.com/michael_insta3" target="_blank" aria-label="Instagram Link for Michael Brown">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <p class="bio">"Dedicated to a positive group experience."</p>
+        </section>
+
+         <section class="glass-card card-admin">
+            <img src="user.png" alt="Admin Profile Picture" loading="lazy">
+            <h3>Olivia Wilson</h3>
+            <p class="role">Admin</p>
+
+            <div class="card-details">
+                <p><strong>Username:</strong> @olivia_admin4</p>
+                <p><strong>DOB:</strong> 09/30/1996</p>
+                <p><strong>Status:</strong> Graphic Designer</p>
+                <p><strong>Location:</strong> City D</p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://t.me/olivia_admin4" target="_blank" aria-label="Telegram Link for Olivia Wilson">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://instagram.com/olivia_insta4" target="_blank" aria-label="Instagram Link for Olivia Wilson">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <p class="bio">"Adding color and creativity to the group."</p>
+        </section>
+
+        <section class="glass-card card-admin">
+            <img src="user.png" alt="Admin Profile Picture" loading="lazy">
+            <h3>James Miller</h3>
+            <p class="role">Admin</p>
+
+            <div class="card-details">
+                <p><strong>Username:</strong> @james_admin5</p>
+                <p><strong>DOB:</strong> 04/18/1993</p>
+                <p><strong>Status:</strong> Data Analyst</p>
+                <p><strong>Location:</strong> City E</p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://t.me/james_admin5" target="_blank" aria-label="Telegram Link for James Miller">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://instagram.com/james_insta5" target="_blank" aria-label="Instagram Link for James Miller">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <p class="bio">"Bringing clarity and insights."</p>
+        </section>
+
+        <section class="glass-card card-admin">
+            <img src="user.png" alt="Admin Profile Picture" loading="lazy">
+            <h3>Ava Taylor</h3>
+            <p class="role">Admin</p>
+
+            <div class="card-details">
+                <p><strong>Username:</strong> @ava_admin6</p>
+                <p><strong>DOB:</strong> 12/07/1999</p>
+                <p><strong>Status:</strong> Student, Communications</p>
+                <p><strong>Location:</strong> City F</p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://t.me/ava_admin6" target="_blank" aria-label="Telegram Link for Ava Taylor">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://instagram.com/ava_insta6" target="_blank" aria-label="Instagram Link for Ava Taylor">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <p class="bio">"Connecting with members and sharing updates."</p>
+        </section>
+
+        <section class="glass-card card-admin">
+            <img src="user.png" alt="Admin Profile Picture" loading="lazy">
+            <h3>Noah Thomas</h3>
+            <p class="role">Admin</p>
+
+            <div class="card-details">
+                <p><strong>Username:</strong> @noah_admin7</p>
+                <p><strong>DOB:</strong> 06/25/1994</p>
+                <p><strong>Status:</strong> Project Manager</p>
+                <p><strong>Location:</strong> City G</p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://t.me/noah_admin7" target="_blank" aria-label="Telegram Link for Noah Thomas">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://instagram.com/noah_insta7" target="_blank" aria-label="Instagram Link for Noah Thomas">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <p class="bio">"Keeping everything running smoothly behind the scenes."</p>
+        </section>
+
+        <section class="glass-card card-admin">
+            <img src="user.png" alt="Admin Profile Picture" loading="lazy">
+            <h3>Isabella White</h3>
+            <p class="role">Admin</p>
+
+            <div class="card-details">
+                <p><strong>Username:</strong> @isabella_admin8</p>
+                <p><strong>DOB:</strong> 03/09/1997</p>
+                <p><strong>Status:</strong> UX/UI Designer</p>
+                <p><strong>Location:</strong> City H</p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://t.me/isabella_admin8" target="_blank" aria-label="Telegram Link for Isabella White">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://instagram.com/isabella_insta8" target="_blank" aria-label="Instagram Link for Isabella White">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <p class="bio">"Designing a better experience for our community."</p>
+        </section>
+
+        </main>
+
+    <script>
+        // Wait for the DOM to be fully loaded before running the script
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme Toggle JavaScript
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+
+            // Function to update the toggle icon based on the current theme
+            function updateToggleIcon(currentTheme) {
+                const icon = themeToggle.querySelector('i');
+                if (currentTheme === 'light-mode') {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                    // Add aria-label for accessibility
+                    themeToggle.setAttribute('aria-label', 'Switch to Dark Mode');
+                } else {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                     // Add aria-label for accessibility
+                    themeToggle.setAttribute('aria-label', 'Switch to Light Mode');
+                }
+            }
+
+            // Check for saved theme preference on load
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.className = savedTheme; // Apply saved theme class
+                updateToggleIcon(savedTheme); // Update icon to match saved theme
+            } else {
+                // Default to light mode if no preference saved
+                body.className = 'light-mode';
+                updateToggleIcon('light-mode');
+            }
+
+            // Add event listener to the theme toggle button
+            themeToggle.addEventListener('click', () => {
+                if (body.classList.contains('light-mode')) {
+                    body.className = 'dark-mode'; // Switch to dark mode
+                    localStorage.setItem('theme', 'dark-mode'); // Save preference
+                    updateToggleIcon('dark-mode'); // Update icon
+                } else {
+                    body.className = 'light-mode'; // Switch to light mode
+                    localStorage.setItem('theme', 'light-mode'); // Save preference
+                    updateToggleIcon('light-mode'); // Update icon
+                }
+            });
+
+            // Intersection Observer for Card Animations
+            const cards = document.querySelectorAll('.glass-card');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        // Stop observing once the element is visible for performance
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1 // Trigger when 10% of the item is visible
+            });
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+        }); // End of DOMContentLoaded listener
     </script>
+
 </body>
 </html>
